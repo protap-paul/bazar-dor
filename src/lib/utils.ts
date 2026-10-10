@@ -13,6 +13,11 @@ export function toEnglishNumber(str: string): number {
     return parseFloat(converted);
 }
 
+export function formatPrice(price: number): string {
+    const formatted = price.toLocaleString("en-IN");
+    return toBengaliNumber(formatted);
+}
+
 export function getUnitBn(unit: string): string {
     const unitMap: Record<string, string> = {
         kg: "প্রতি কেজি",
