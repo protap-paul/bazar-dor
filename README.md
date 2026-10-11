@@ -33,7 +33,7 @@
 ```bash
 
 # ক্লোন করুন
-git clone <your-repo-url>
+git clone <https://github.com/protap-paul/bazar-dor>
 
 # ডিপেন্ডেন্সি ইনস্টল
 npm install
