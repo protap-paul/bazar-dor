@@ -13,7 +13,7 @@ const Footer = () => {
 
                 {/* Right side */}
                 <p className="text-sm text-gray-400 text-center md:text-right max-w-md">
-                    সকল দাম সম্ভাব্য; বাজার অবস্থার ওপর নি র্ভর করে পরি বর্তি ত হয়।
+                    সকল দাম সম্ভাব্য; বাজার অবস্থার ওপর নির্ভর করে পরিবর্তিত হয়।
                 </p>
             </div>
         </footer>
