@@ -22,10 +22,10 @@ const SignUpPage = () => {
             password,
         });
         if (error) {
-            toast.error(error.message || "রে জি স্ট্রে শন ব্যর্থ হয়ে ছে !");
+            toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে !");
             setLoading(false);
         } else {
-            toast.success("রে জি স্ট্রে শন সফল! সাইন ইন পে জে যাচ্ছে ...");
+            toast.success("রেজিস্ট্রেশন সফল! সাইন ইন পেজে যাচ্ছে ...");
             router.push("/signin");
         }
     };
