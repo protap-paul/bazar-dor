@@ -18,7 +18,7 @@ const ProfilePage = () => {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center">
                 <p className="text-gray-500 mb-4">আপনি লগইন করেননি </p>
-                <Link href="/signin" className="btn btn-success text-white">
+                <Link href="/sign-in" className="btn btn-success text-white">
                     সাইন ইন করুন
                 </Link>
             </div>

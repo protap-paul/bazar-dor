@@ -1,22 +1,20 @@
-import { headers } from 'next/headers'
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-import { auth } from './lib/auth';
+import { getSessionCookie } from "better-auth/cookies";
+import { NextRequest, NextResponse } from "next/server";
 
-// This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
+    const sessionCookie = getSessionCookie(request);
 
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    const user = session?.user;
-
-    if (!user) {
-        return NextResponse.redirect(new URL('/sign-in', request.url))
+    if (!sessionCookie) {
+        const signInUrl = new URL("/sign-in", request.url);
+        signInUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
+        return NextResponse.redirect(signInUrl);
     }
 
+    return NextResponse.next();
 }
+
+export const middleware = proxy;
+
 export const config = {
-    matcher: ["/product/:path*", '/profile/:path*'],
-}
+    matcher: ["/product/:path*", "/profile/:path*"],
+};

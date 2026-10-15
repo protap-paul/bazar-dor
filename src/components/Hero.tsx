@@ -32,7 +32,7 @@ const Hero = () => {
                     </p>
 
                     <a
-                        href="#"
+                        href="#সব-পণ্য"
                         className="btn btn-success text-white btn-md"
                     >
                         সব পণ্য দেখুন

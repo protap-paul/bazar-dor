@@ -4,13 +4,25 @@ import { notFound } from "next/navigation";
 
 
 const getProduct = async (slug: string): Promise<Product | null> => {
-    const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products",
-        { next: { revalidate: 60 } }
-    );
-    if (!res.ok) return null;
-    const products: Product[] = await res.json();
-    return products.find((p) => p.slug === slug) || null;
-}
+    try {
+        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products", {
+            next: { revalidate: 60 },
+        });
+        if (!res.ok) return null;
+        const products: Product[] = await res.json();
+        const decodedSlug = decodeURIComponent(slug);
+        return (
+            products.find(
+                (p) =>
+                    p.slug === slug ||
+                    p.slug === decodedSlug ||
+                    String(p.id) === slug
+            ) || null
+        );
+    } catch {
+        return null;
+    }
+};
 
 const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params;
@@ -18,7 +30,8 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
     if (!product) {
         notFound();
     }
-    const marketsByDivision = product.markets.reduce(
+    const markets = product.markets || [];
+    const marketsByDivision = markets.reduce(
         (acc, market) => {
             if (!acc[market.division]) {
                 acc[market.division] = [];
@@ -28,15 +41,17 @@ const ProductPage = async ({ params }: { params: Promise<{ slug: string }> }) =>
         },
         {} as Record<string, typeof product.markets>
     );
-    const allMins = product.markets.map((m) => m.min);
-    const allMaxs = product.markets.map((m) => m.max);
-    const minPrice = Math.min(...allMins);
-    const maxPrice = Math.max(...allMaxs);
-    const avgPrice = Math.round(
-        product.markets.reduce((sum, m) => sum + (m.min + m.max) / 2,
-            0) /
-        product.markets.length
-    );
+    const allMins = markets.map((m) => m.min);
+    const allMaxs = markets.map((m) => m.max);
+    const minPrice = allMins.length > 0 ? Math.min(...allMins) : product.today;
+    const maxPrice = allMaxs.length > 0 ? Math.max(...allMaxs) : product.today;
+    const avgPrice =
+        markets.length > 0
+            ? Math.round(
+                  markets.reduce((sum, m) => sum + (m.min + m.max) / 2, 0) /
+                      markets.length
+              )
+            : product.today;
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             {/* Breadcrumb */}
